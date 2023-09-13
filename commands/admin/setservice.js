@@ -1,4 +1,5 @@
 const { ApplicationCommandType, PermissionFlagsBits,ApplicationCommandOptionType, Colors, EmbedBuilder } = require('discord.js');
+const discord = require('discord')
 
 module.exports = {
     name: 'setservice',

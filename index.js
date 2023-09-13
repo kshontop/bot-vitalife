@@ -22,12 +22,8 @@ const client = new Client({
     ]
 });
 
-
 client.command = new Collection();
-client.cooldown = new Map();
-
-client.usersService = new Map();
-client.serviceStartTimes = new Map();
+client.cooldown = new Collection();
 
 module.exports = client;
 

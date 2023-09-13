@@ -1,4 +1,5 @@
 const { ApplicationCommandType, PermissionFlagsBits,ApplicationCommandOptionType, Colors, EmbedBuilder } = require('discord.js');
+
 module.exports = {
     name: 'setavatar',
     description: '🚑 Permet de changer la photo de profil du bot.',

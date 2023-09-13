@@ -28,6 +28,7 @@ module.exports = (client) => {
 
     console.log(`•----------•`.bold.black)
 
+    // # events
     const loadEvents = (dir = "./events/") => {
         readdirSync(dir).forEach(dirs => {
             const events = readdirSync(`${dir}/${dirs}`).filter(files => files.endsWith(".js"));

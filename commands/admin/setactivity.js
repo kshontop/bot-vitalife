@@ -1,4 +1,5 @@
-const { ApplicationCommandType, PermissionFlagsBits,ApplicationCommandOptionType, Colors, EmbedBuilder } = require('discord.js');
+const { ApplicationCommandType, PermissionFlagsBits,ApplicationCommandOptionType, Colors, EmbedBuilder, ActivityType } = require('discord.js');
+
 module.exports = {
     name: 'setactivity',
     description: '🚑 Permet de modifier l\'activité du bot ',
@@ -42,7 +43,7 @@ execute: async (client, interaction, args) => {
     const status = interaction.options.getString('status')
     const activity = interaction.options.getString('activity')
     client.user.setPresence({
-        status: activity, activities: [{ name: status, type: discord.ActivityType.Playing }],
+        status: activity, activities: [{ name: status, type: ActivityType.Playing }],
       });
  
     interaction.reply({embeds: [new EmbedBuilder().setTitle('Status').setDescription(`Le status du bot modifié avec succès `)]})
