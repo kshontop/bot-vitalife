@@ -1,4 +1,4 @@
-const { ApplicationCommandType, PermissionFlagsBits,ApplicationCommandOptionType, Colors, EmbedBuilder } = require('discord.js');
+﻿const { ApplicationCommandType, PermissionFlagsBits,ApplicationCommandOptionType, Colors, EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'setname',
@@ -23,4 +23,3 @@ execute: async (client, interaction, args) => {
 
     }     
 }
- 

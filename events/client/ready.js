@@ -1,19 +1,18 @@
-const colors = require('colors');
-const { ActivityType} = require('discord.js');
-const { default: mongoose, mongo } = require('mongoose');
-const config = require ("../../config.json");
+﻿const config = require("../../config.json");
+const mongoose = require('mongoose');
 
 module.exports = {
-	name: 'ready',
-	once: false,
-execute: async (client) => {
-    await mongoose.connect(config.mongodb || '', {
-        keepAlive: true,
+  name: 'ready',
+  once: false,
+  execute: async (client) => {
+
+    console.log(client.user.username)
+    await mongoose.connect(config.mongodb, {
+      keepAlive: true
     });
 
-    if (mongoose.connect)
-    console.log('[MongoDB] '.bold.green + `La connexion est réussie.`.bold.white)
-    console.log('[API] '.bold.green + `Connected to Discord.`.bold.white)
-
+    if(mongoose.connect) {
+      console.log(`[Mongoose]`.bold.green + ` Base de données connecté avec succès`.bold.white);
     }
+  }
 }

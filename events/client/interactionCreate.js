@@ -1,13 +1,60 @@
-const { Attachment } = require("discord.js");
-const Discord = require ("discord.js");
-const { raw } = require("express");
-const logs = require('../../Models/logs');
+﻿const Discord = require ("discord.js");
+const logsData = require('../../models/logs.js');
+const users = require('../../models/users.js');
+
 const ms = require("ms")
 
 module.exports = {
 	name: 'interactionCreate',
 	once: false,
 execute: async (interaction, client) => {
+  
+
+  const incriptionModal = new Discord.ModalBuilder()
+  .setTitle('Créer son profil')
+  .setCustomId('candid')
+  .setComponents(
+    new Discord.ActionRowBuilder().setComponents(
+      new Discord.TextInputBuilder()
+      .setCustomId("name")
+      .setLabel("Prénom")
+      .setRequired(true)
+      .setPlaceholder("Indique ton prénom")
+      .setStyle(Discord.TextInputStyle.Short)
+      .setMinLength(2)
+    ),
+    new Discord.ActionRowBuilder().setComponents(
+      new Discord.TextInputBuilder()
+      .setLabel('AGE')
+      .setCustomId('age')
+      .setRequired(true)
+      .setPlaceholder('Indique ton âge')
+      .setStyle(Discord.TextInputStyle.Short)
+      .setMinLength(2)
+      .setMaxLength(2)
+  ),
+  new Discord.ActionRowBuilder().setComponents(
+    new Discord.TextInputBuilder()
+    .setLabel('Sexe')
+    .setCustomId('sexe')
+    .setRequired(true)
+    .setPlaceholder('Homme / Femme')
+    .setStyle(Discord.TextInputStyle.Short)
+    .setMinLength(5)
+    .setMaxLength(5)
+  ),
+  new Discord.ActionRowBuilder().setComponents(
+    new Discord.TextInputBuilder()
+    .setLabel('ORIENTATION SEXUELLE')
+    .setCustomId('orientation')
+    .setRequired(true)
+    .setPlaceholder('Hétéro / Bi / Homosexuel / Lesbienne')
+    .setStyle(Discord.TextInputStyle.Short)
+    .setMinLength(2)
+    .setMaxLength(10)
+  ),
+  )
+
     await slashCommands();
 
     async function slashCommands() {
@@ -48,74 +95,118 @@ execute: async (interaction, client) => {
         } else if(interaction.isButton()) {
 
           if (interaction.customId === 'pds'){
-            let  cl = await logs.findOne({ guildID: interaction.guild.id })
+            let  cl = await logsData.findOne({ guildID: interaction.guild.id })
             if(!cl) return interaction.reply({ content: `Channel des services non défini`, ephemeral: true});
 
-            if(client.usersService.has(interaction.user.id)) {
-              interaction.reply({ content: `Vous avez déjà pris votre prise de service.`, ephemeral: true})
-            } else {
-              const now = new Date();
-              const hours = now.getHours();
-              const minutes = now.getMinutes();
-  
-              const formattedTime = `${hours.toString().padStart(2, '0')}h${minutes.toString().padStart(2, '0')}`; 
-              const embed = new Discord.EmbedBuilder()
-              .setAuthor({ name: `Prise de service - ${interaction.user.globalName}`, iconURL: 'https://cdn.discordapp.com/icons/1068556793896247356/c258200f480d432709f8fc68ad1e1ce6.webp?size=128',})
-              .setThumbnail('https://cdn.discordapp.com/icons/1068556793896247356/c258200f480d432709f8fc68ad1e1ce6.webp?size=128')
-              .setColor('Green')
-              .addFields(
-                { name: `Agent`, value: `${interaction.user}`},
-                { name: `Heure`, value: `${formattedTime}`}
-              ) 
-              .setFooter({ text: `Prise de service - EMS`})
-  
-  
-              let canal = client.channels.resolve(cl.ChannelID)
-              if(canal){
-                canal.send({embeds: [embed]}).then(() => {
-                  client.usersService.set(interaction.user.id, interaction.user);
-                  client.serviceStartTimes.set(interaction.user.id, new Date());
-                })
+            const userData = await users.findOne({ userID: interaction.user.id });
 
-                interaction.reply({content: `Vous avez pris votre service.`, ephemeral: true})
+            if(userData) {
+              if(userData.isInService) {
+                interaction.reply({ content: `Vous avez déjà pris votre prise de service.`, ephemeral: true})
+              } else {
+                let canal = client.channels.resolve(cl.channelID);
+
+                if(canal){
+                  userData.isInService = true;
+                  userData.serviceStartTime = new Date();
+                  await userData.save();
+
+                  const now = new Date();
+                  const hours = now.getHours();
+                  const minutes = now.getMinutes();
+      
+                  const formattedTime = `${hours.toString().padStart(2, '0')}h${minutes.toString().padStart(2, '0')}`; 
+                  const embed = new Discord.EmbedBuilder()
+                  .setAuthor({ name: `Prise de service - ${interaction.user.globalName}`, iconURL: 'https://cdn.discordapp.com/icons/1068556793896247356/c258200f480d432709f8fc68ad1e1ce6.webp?size=128',})
+                  .setThumbnail('https://cdn.discordapp.com/icons/1068556793896247356/c258200f480d432709f8fc68ad1e1ce6.webp?size=128')
+                  .setColor('Green')
+                  .addFields(
+                    { name: `Agent`, value: `${interaction.user}`},
+                    { name: `Heure`, value: `${formattedTime}`}
+                  ) 
+                  .setFooter({ text: `Prise de service - EMS`})
+
+                  canal.send({embeds: [embed]})
+  
+                  interaction.reply({content: `Vous avez pris votre service.`, ephemeral: true})
+                } else {
+                  return interaction.reply({ content: `Channel des services non trouvé`, ephemeral: true});
+                }
               }
+            } else {
+              const newUser = new users({
+                userID: interaction.user.id,
+                serviceStartTime: new Date(),
+                totalServiceTime: 0,
+                isInService: true
+              })
+
+              await newUser.save();
             }
+            
           }
           
           if (interaction.customId === 'fds'){
-            let  cl = await logs.findOne({ guildID: interaction.guild.id })
+
+            let  cl = await logsData.findOne({ guildID: interaction.guild.id })
             if(!cl) return interaction.reply({ content: `Channel des services non défini`, ephemeral: true});
 
-            if(client.usersService.has(interaction.user.id)) {
-              let canal = client.channels.resolve(cl.ChannelID)
-              if(canal){
-              const serviceStartTime = client.serviceStartTimes.get(interaction.user.id);
-              const endTime = new Date();
-              const serviceDuration = new Date(endTime - serviceStartTime);
-              const formattedDuration = `${serviceDuration.getUTCHours()}h ${serviceDuration.getUTCMinutes()}m ${serviceDuration.getUTCSeconds()}s`;
+            const userData = await users.findOne({ userID: interaction.user.id });
 
-              const now = new Date();
-              const hours = now.getHours();
-              const minutes = now.getMinutes();
+            if(userData) {
+              if(userData.isInService) {
+                let canal = client.channels.resolve(cl.channelID);
+
+                if(canal) {
+                  const currentTime = new Date();
+                  const serviceTime = currentTime - userData.serviceStartTime;
+                  userData.totalServiceTime += serviceTime;
+                  userData.isInService = false;
   
-              const formattedTime = `${hours.toString().padStart(2, '0')}h${minutes.toString().padStart(2, '0')}`; 
-              const embed = new Discord.EmbedBuilder()
-              .setAuthor({ name: `Fin de service - ${interaction.user.globalName}`, iconURL: 'https://cdn.discordapp.com/icons/1068556793896247356/c258200f480d432709f8fc68ad1e1ce6.webp?size=128',})
-              .setThumbnail('https://cdn.discordapp.com/icons/1068556793896247356/c258200f480d432709f8fc68ad1e1ce6.webp?size=128')
-              .setColor('Red')
-              .addFields(
-                { name: `Agent`, value: `${interaction.user}`},
-                { name: `Heure`, value: `${formattedTime}`},
-                { name: `Temps de service:`, value: `${formattedDuration}`},
-              ) 
-              .setFooter({ text: `Fin de service - EMS`})
+                  await userData.save();
+  
+                  const serviceHours = Math.floor(serviceTime / 3600000);
+                  const serviceMinutes = Math.floor((serviceTime % 3600000) / 60000);
+                  const serviceSeconds = Math.floor((serviceTime % 60000) / 1000);
+                  const now = new Date();
+                  const hours = now.getHours();
+                  const minutes = now.getMinutes();
 
-                canal.send({embeds: [embed]})
-                interaction.reply({content: `Vous avez pris votre fin de service.`, ephemeral: true})
+                  const totalServiceHours = Math.floor(userData.totalServiceTime / 3600000);
+                  const totalServiceMinutes = Math.floor((userData.totalServiceTime % 3600000) / 60000);
+                  const totalServiceSeconds = Math.floor((userData.totalServiceTime % 60000) / 1000);
+
+                  const totalFormat = `${totalServiceHours}h${totalServiceMinutes}m${totalServiceSeconds}s`
+
+                  const formattedTime1 = `${hours.toString().padStart(2, '0')}h${minutes.toString().padStart(2, '0')}`; 
+
+                  const formattedTime2 = `${serviceHours}h ${serviceMinutes}m ${serviceSeconds}s`
+
+                  const embed = new Discord.EmbedBuilder()
+                  .setAuthor({ name: `Fin de service - ${interaction.user.globalName}`, iconURL: 'https://cdn.discordapp.com/icons/1068556793896247356/c258200f480d432709f8fc68ad1e1ce6.webp?size=128',})
+                  .setThumbnail('https://cdn.discordapp.com/icons/1068556793896247356/c258200f480d432709f8fc68ad1e1ce6.webp?size=128')
+                  .setColor('Red')
+                  .addFields(
+                    { name: `Agent`, value: `${interaction.user}`},
+                    { name: `Heure`, value: `${formattedTime1}`},
+                    { name: `Temps de service:`, value: `${formattedTime2}`},
+                    { name: `Temps total en service:`, value: `${totalFormat}`},
+                  ) 
+                  .setFooter({ text: `Fin de service - EMS`})
+    
+                    canal.send({embeds: [embed]})
+                    interaction.reply({content: `Vous avez pris votre fin de service.`, ephemeral: true})
+
+                } else {
+                  return interaction.reply({ content: `Channel des services non trouvé`, ephemeral: true});
+                }
+              } else {
+                interaction.reply({ content: `Vous n'avez pas pris votre prise de service.`, ephemeral: true})
               }
             } else {
-              interaction.reply({ content: `Vous n'avez pas pris votre prise de service.`, ephemeral: true})
+              interaction.reply({ content: 'Vous n\'avez pas enregistré de prise de service.', ephemeral: true });
             }
+            
           }
         } 
 

@@ -1,6 +1,4 @@
-const { Routes } = require('discord-api-types/v9');
-const { REST } = require('@discordjs/rest')
-const { readdirSync } = require('fs');
+﻿const { readdirSync } = require('fs');
 const colors = require('colors');
 
 module.exports = (client) => {
@@ -10,7 +8,6 @@ module.exports = (client) => {
     const loadSlashCommands = (dir = "./commands/") => {
         readdirSync(dir).forEach(dirs => {
             const commands = readdirSync(`${dir}/${dirs}/`).filter(files => files.endsWith(".js"));
-
             for (const files of commands) {
                 const getFileName = require(`../${dir}/${dirs}/${files}`);
                 client.slashCommands.set(getFileName.name, getFileName);

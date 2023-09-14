@@ -1,5 +1,4 @@
-const { ApplicationCommandType, PermissionFlagsBits,ApplicationCommandOptionType, Colors, EmbedBuilder } = require('discord.js');
-const discord = require('discord')
+﻿const { ApplicationCommandType, PermissionFlagsBits,ApplicationCommandOptionType, Colors, EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 
 module.exports = {
     name: 'setservice',
@@ -17,17 +16,17 @@ module.exports = {
 execute: async (client, interaction, args) => {
 
     const channel = interaction.options.getChannel('channel')
-    const embed = new discord.EmbedBuilder()
+    const embed = new EmbedBuilder()
     .setColor('Green')
     .setDescription(`Merci de sélectionner l'une des options en cliquant sur un des boutons pour indiquer le début ou la fin de votre service.`)
 
-const row = new discord.ActionRowBuilder().addComponents(
-    new discord.ButtonBuilder()
+const row = new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
     .setCustomId('pds')
     .setEmoji('✅')
     .setLabel('Prise de service')
     .setStyle('Success'),
-     new discord.ButtonBuilder()
+     new ButtonBuilder()
     .setCustomId("fds")
     .setEmoji('⛔')
     .setLabel("Fin de service")

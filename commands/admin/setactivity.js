@@ -1,4 +1,4 @@
-const { ApplicationCommandType, PermissionFlagsBits,ApplicationCommandOptionType, Colors, EmbedBuilder, ActivityType } = require('discord.js');
+﻿const { ApplicationCommandType, PermissionFlagsBits,ApplicationCommandOptionType, Colors, EmbedBuilder, ActivityType } = require('discord.js');
 
 module.exports = {
     name: 'setactivity',
@@ -51,5 +51,4 @@ execute: async (client, interaction, args) => {
     }     
 }
  
-
 
