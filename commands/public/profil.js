@@ -8,7 +8,7 @@ module.exports = {
     type: ApplicationCommandType.ChatInput,
 
     execute: async (client, interaction, args) => {
-     const dataUser = await logs.findOne({ userID: interaction.user.id });
+     const dataUser = await logs.findOne({ userID: interaction.user.id, guildID: interaction.guild.id });
         if(!dataUser) return interaction.reply({embeds: [new EmbedBuilder().setDescription('Vous n\'avez pas encore effectué de service, ce qui signifie que nous ne pouvons pas afficher votre service total.')]})
 
         const totalServiceHours = Math.floor(dataUser.totalServiceTime / 3600000);

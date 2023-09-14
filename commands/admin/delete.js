@@ -18,7 +18,7 @@ execute: async (client, interaction, args) => {
 
       const users = interaction.options.getUser('user');
 
-      const dataUser = await logs.findOne({ userID: users.id });
+      const dataUser = await logs.findOne({ userID: users.id, guildID: interaction.guild.id });
       if(!dataUser) return interaction.reply({embeds: [new EmbedBuilder().setDescription('L\'utilisateur mentionné n\'a pas encore effectué de service.')]})
 
       dataUser.totalServiceTime = 0;

@@ -1,5 +1,5 @@
 {
-  "name": "bot_vitalife",
+  "name": "test",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "Ce bot a été spécialement conçu par https://github.com/uhq111 pour les EMS de VitaLife. ",
+  "author": "",
   "license": "ISC",
   "dependencies": {
     "colors": "^1.4.0",

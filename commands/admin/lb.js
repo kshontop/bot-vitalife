@@ -9,7 +9,7 @@ module.exports = {
     default_member_permissions: '8',
     execute: async (client, interaction, args) => {
      
-      const users = await userDatas.find();
+      const users = await userDatas.find({ guildID: interaction.guild.id });
 
       users.sort((a, b) => b.totalServiceTime - a.totalServiceTime);
       const usersPerPage = 15;

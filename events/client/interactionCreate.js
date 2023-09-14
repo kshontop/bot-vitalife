@@ -98,7 +98,7 @@ execute: async (interaction, client) => {
             let  cl = await logsData.findOne({ guildID: interaction.guild.id })
             if(!cl) return interaction.reply({ content: `Channel des services non défini`, ephemeral: true});
 
-            const userData = await users.findOne({ userID: interaction.user.id });
+            const userData = await users.findOne({guildID: interaction.guild.id, userID: interaction.user.id });
 
             if(userData) {
               if(userData.isInService) {
@@ -114,6 +114,10 @@ execute: async (interaction, client) => {
                   const now = new Date();
                   const hours = now.getHours();
                   const minutes = now.getMinutes();
+
+                  const day = now.getDate().toString().padStart(2, '0');
+                  const month = (now.getMonth() + 1).toString().padStart(2, '0');
+                  const year = now.getFullYear();
       
                   const formattedTime = `${hours.toString().padStart(2, '0')}h${minutes.toString().padStart(2, '0')}`; 
                   const embed = new Discord.EmbedBuilder()
@@ -122,19 +126,29 @@ execute: async (interaction, client) => {
                   .setColor('Green')
                   .addFields(
                     { name: `Agent`, value: `${interaction.user}`},
-                    { name: `Heure`, value: `${formattedTime}`}
+                    { name: `Heure`, value: `${formattedTime}`},
+                    { name: `Date`, value: `${day}/${month}/${year}` }
+                    
                   ) 
                   .setFooter({ text: `Prise de service - EMS`})
 
                   canal.send({embeds: [embed]})
   
-                  interaction.reply({content: `Vous avez pris votre service.`, ephemeral: true})
+                  const msg = await interaction.reply({content: `${interaction.user}, vous avez pris votre service.`})
+                  setTimeout(() => {
+                    msg.delete().catch(() => {})
+                  }, 2000);
                 } else {
                   return interaction.reply({ content: `Channel des services non trouvé`, ephemeral: true});
                 }
               }
             } else {
+              const msg = await interaction.reply({content: `${interaction.user}, vous avez pris votre service.`})
+              setTimeout(() => {
+                msg.delete().catch(() => {})
+              }, 2000);
               const newUser = new users({
+                guildID: interaction.guild.id,
                 userID: interaction.user.id,
                 serviceStartTime: new Date(),
                 totalServiceTime: 0,
@@ -151,7 +165,7 @@ execute: async (interaction, client) => {
             let  cl = await logsData.findOne({ guildID: interaction.guild.id })
             if(!cl) return interaction.reply({ content: `Channel des services non défini`, ephemeral: true});
 
-            const userData = await users.findOne({ userID: interaction.user.id });
+            const userData = await users.findOne({ guildID: interaction.guild.id, userID: interaction.user.id });
 
             if(userData) {
               if(userData.isInService) {
@@ -195,7 +209,11 @@ execute: async (interaction, client) => {
                   .setFooter({ text: `Fin de service - EMS`})
     
                     canal.send({embeds: [embed]})
-                    interaction.reply({content: `Vous avez pris votre fin de service.`, ephemeral: true})
+
+                    const msg = await interaction.reply({content: `${interaction.user}, vous avez pris votre fin de service.`})
+                    setTimeout(() => {
+                      msg.delete().catch(() => {})
+                    }, 2000);
 
                 } else {
                   return interaction.reply({ content: `Channel des services non trouvé`, ephemeral: true});

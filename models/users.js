@@ -1,6 +1,7 @@
 ﻿const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
+  guildID: String,
   userID: String,
   serviceStartTime: Date,
   totalServiceTime: Number,
