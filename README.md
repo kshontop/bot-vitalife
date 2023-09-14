@@ -7,7 +7,7 @@
 
 ## Authors
 
-- [@uhq111](https://github.com/uhq111)
+- [@uhq111](https://github.com/uhq111) and [@K4l4din](https://github.com/K4l4din)
 
 
 ## Support
