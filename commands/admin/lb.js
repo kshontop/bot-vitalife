@@ -9,10 +9,11 @@ module.exports = {
     default_member_permissions: '8',
     execute: async (client, interaction, args) => {
      
+ 
       const users = await userDatas.find({ guildID: interaction.guild.id });
 
       users.sort((a, b) => b.totalServiceTime - a.totalServiceTime);
-      const usersPerPage = 15;
+      const usersPerPage = 8;
       const totalPages = Math.ceil(users.length / usersPerPage)
 
       let page = 1;
@@ -43,6 +44,7 @@ module.exports = {
       .setTitle(`Leaderboard prise de service`)
       .setDescription(`${description.join('\n')}`)
       .setColor('Green')
+      .setFooter({ text: `${page}/${totalPages}`})
 
       const components = totalPages > 1
       ? [
@@ -87,8 +89,12 @@ module.exports = {
 
         const userNames = await Promise.all(
           usersToShow.map(async (user) => {
-            const member = await interaction.guild.members.fetch(user.userID);
-            return member ? member.user : `${user.userID}`;
+            try {
+                const member = await interaction.guild.members.fetch(user.userID);
+                return member ? member.user : `${user.userID}`;
+            } catch(error) {
+                return `${user.userID}`
+            }
           })
         );
   
@@ -104,6 +110,7 @@ module.exports = {
         });
       
         embed.setDescription(`${description.join('\n')}`)
+        embed.setFooter({ text: `${page}/${totalPages}`})
 
         await interaction.update({ embeds: [embed] });
       })
