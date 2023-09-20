@@ -112,14 +112,13 @@ execute: async (interaction, client) => {
                   await userData.save();
 
                   const now = new Date();
-                  const hours = now.getHours();
-                  const minutes = now.getMinutes();
-
+                  const options = { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' };
+                  const formattedTime = now.toLocaleTimeString('fr-FR', options);
+                  
                   const day = now.getDate().toString().padStart(2, '0');
                   const month = (now.getMonth() + 1).toString().padStart(2, '0');
                   const year = now.getFullYear();
-      
-                  const formattedTime = `${hours.toString().padStart(2, '0')}h${minutes.toString().padStart(2, '0')}`; 
+                  
                   const embed = new Discord.EmbedBuilder()
                   .setAuthor({ name: `Prise de service - ${interaction.user.globalName}`, iconURL: 'https://cdn.discordapp.com/icons/1068556793896247356/c258200f480d432709f8fc68ad1e1ce6.webp?size=128',})
                   .setThumbnail('https://cdn.discordapp.com/icons/1068556793896247356/c258200f480d432709f8fc68ad1e1ce6.webp?size=128')
@@ -130,7 +129,7 @@ execute: async (interaction, client) => {
                     { name: `Date`, value: `${day}/${month}/${year}` }
                     
                   ) 
-                  .setFooter({ text: `Prise de service - EMS`})
+                  .setFooter({ text: `Prise de service - Auto Exotic`})
 
                   canal.send({embeds: [embed]})
   
@@ -143,10 +142,6 @@ execute: async (interaction, client) => {
                 }
               }
             } else {
-              const msg = await interaction.reply({content: `${interaction.user}, vous avez pris votre service.`})
-              setTimeout(() => {
-                msg.delete().catch(() => {})
-              }, 2000);
               const newUser = new users({
                 guildID: interaction.guild.id,
                 userID: interaction.user.id,
@@ -156,6 +151,35 @@ execute: async (interaction, client) => {
               })
 
               await newUser.save();
+              let canal = client.channels.resolve(cl.channelID);
+              if(canal) {
+                const now = new Date();
+                const options = { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' };
+                const formattedTime = now.toLocaleTimeString('fr-FR', options);
+                
+                const day = now.getDate().toString().padStart(2, '0');
+                const month = (now.getMonth() + 1).toString().padStart(2, '0');
+                const year = now.getFullYear();
+
+                const embed = new Discord.EmbedBuilder()
+                .setAuthor({ name: `Prise de service - ${interaction.user.globalName}`, iconURL: 'https://cdn.discordapp.com/icons/1068556793896247356/c258200f480d432709f8fc68ad1e1ce6.webp?size=128',})
+                .setThumbnail('https://cdn.discordapp.com/icons/1068556793896247356/c258200f480d432709f8fc68ad1e1ce6.webp?size=128')
+                .setColor('Green')
+                .addFields(
+                  { name: `Agent`, value: `${interaction.user}`},
+                  { name: `Heure`, value: `${formattedTime}`},
+                  { name: `Date`, value: `${day}/${month}/${year}` }
+                  
+                ) 
+                .setFooter({ text: `Prise de service - Auto Exotic`})
+
+                canal.send({embeds: [embed]})
+                const msg = await interaction.reply({content: `${interaction.user}, vous avez pris votre service.`})
+                setTimeout(() => {
+                  msg.delete().catch(() => {})
+                }, 2000);
+
+              }
             }
             
           }
@@ -183,16 +207,14 @@ execute: async (interaction, client) => {
                   const serviceMinutes = Math.floor((serviceTime % 3600000) / 60000);
                   const serviceSeconds = Math.floor((serviceTime % 60000) / 1000);
                   const now = new Date();
-                  const hours = now.getHours();
-                  const minutes = now.getMinutes();
+                  const options = { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' };
+                  const formattedTime = now.toLocaleTimeString('fr-FR', options);
 
                   const totalServiceHours = Math.floor(userData.totalServiceTime / 3600000);
                   const totalServiceMinutes = Math.floor((userData.totalServiceTime % 3600000) / 60000);
                   const totalServiceSeconds = Math.floor((userData.totalServiceTime % 60000) / 1000);
 
                   const totalFormat = `${totalServiceHours}h${totalServiceMinutes}m${totalServiceSeconds}s`
-
-                  const formattedTime1 = `${hours.toString().padStart(2, '0')}h${minutes.toString().padStart(2, '0')}`; 
 
                   const formattedTime2 = `${serviceHours}h ${serviceMinutes}m ${serviceSeconds}s`
 
@@ -202,11 +224,11 @@ execute: async (interaction, client) => {
                   .setColor('Red')
                   .addFields(
                     { name: `Agent`, value: `${interaction.user}`},
-                    { name: `Heure`, value: `${formattedTime1}`},
+                    { name: `Heure`, value: `${formattedTime}`},
                     { name: `Temps de service:`, value: `${formattedTime2}`},
                     { name: `Temps total en service:`, value: `${totalFormat}`},
                   ) 
-                  .setFooter({ text: `Fin de service - EMS`})
+                  .setFooter({ text: `Fin de service - Auto Exotic `})
     
                     canal.send({embeds: [embed]})
 
