@@ -4,7 +4,7 @@ const logs = require('../../models/users.js');
 
 module.exports = {
     name: 'profil',
-    description: '🚑 Permet d\'afficher vos temps de services',
+    description: '⛽ Permet d\'afficher vos temps de services',
     type: ApplicationCommandType.ChatInput,
 
     execute: async (client, interaction, args) => {

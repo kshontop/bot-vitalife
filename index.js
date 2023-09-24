@@ -38,5 +38,8 @@ client.on('ready', async () => {
     await readyEvent.execute(client);
 
 })
+const startServiceCheck = require('./cron/checkService');
+startServiceCheck(client);
+
 
 client.login(config.token)

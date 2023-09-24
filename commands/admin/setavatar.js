@@ -2,7 +2,7 @@
 
 module.exports = {
     name: 'setavatar',
-    description: '🚑 Permet de changer la photo de profil du bot.',
+    description: '⛽ Permet de changer la photo de profil du bot.',
     default_member_permissions: '8',
     type: ApplicationCommandType.ChatInput,
         options: [

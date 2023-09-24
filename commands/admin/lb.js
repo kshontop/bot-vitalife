@@ -4,7 +4,7 @@ const userDatas = require('../../models/users.js');
 
 module.exports = {
     name: 'leaderboard',
-    description: '🚑 Permet d\'afficher les services de tout les EMS',
+    description: '⛽ Permet d\'afficher les services de tout les employés',
     type: ApplicationCommandType.ChatInput,
     default_member_permissions: '8',
     execute: async (client, interaction, args) => {

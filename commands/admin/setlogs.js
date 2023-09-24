@@ -3,7 +3,7 @@ const logsData = require('../../models/logs.js');
 
 module.exports = {
   name: 'setlogs',
-  description: '🚑 Active les logs dans un salon',
+  description: '⛽ Active les logs dans un salon',
   default_member_permissions: '8',
   type: ApplicationCommandType.ChatInput,
   options: [

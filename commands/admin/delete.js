@@ -3,7 +3,7 @@ const logs = require('../../models/users.js');
 
 module.exports = {
     name: 'delete',
-    description: '🚑 Permet de supprimer les heures total d\'un utilisateur',
+    description: '⛽ Permet de supprimer les heures total d\'un utilisateur',
     type: ApplicationCommandType.ChatInput,
     default_member_permissions: '8',
         options: [

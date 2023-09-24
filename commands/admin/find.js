@@ -3,7 +3,7 @@ const logs = require('../../models/users.js');
 
 module.exports = {
     name: 'find',
-    description: '🚑 Permet de consulter les services d\'un agent',
+    description: '⛽ Permet de consulter les temps de services d\'un employé',
     type: ApplicationCommandType.ChatInput,
         options: [
         {

@@ -2,7 +2,7 @@
 
 module.exports = {
     name: 'setname',
-    description: '🚑 Permet de modifier le nom du bot.',
+    description: '⛽ Permet de modifier le nom du bot.',
     default_member_permissions: '8',
     type: ApplicationCommandType.ChatInput,
         options: [

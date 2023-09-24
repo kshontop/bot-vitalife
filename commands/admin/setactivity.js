@@ -2,7 +2,7 @@
 
 module.exports = {
     name: 'setactivity',
-    description: '🚑 Permet de modifier l\'activité du bot ',
+    description: '⛽ Permet de modifier l\'activité du bot ',
     default_member_permissions: '8',
     type: ApplicationCommandType.ChatInput,
         options: [
