@@ -88,7 +88,7 @@ module.exports = {
                                         { name: `Date`, value: `${day}/${month}/${year}` }
 
                                     )
-                                    .setFooter({ text: `Prise de service - WhiteCustom` })
+                                    .setFooter({ text: `Prise de service - EMS` })
 
                                 canal.send({ embeds: [embed] })
 
@@ -134,7 +134,7 @@ module.exports = {
                                     { name: `Date`, value: `${day}/${month}/${year}` }
 
                                 )
-                                .setFooter({ text: `Prise de service - WhiteCustom` })
+                                .setFooter({ text: `Prise de service - EMS` })
 
                             canal.send({ embeds: [embed] })
                             const msg = await interaction.reply({ content: `${interaction.user}, vous avez pris votre service.` });
@@ -186,7 +186,7 @@ module.exports = {
                                         { name: `Temps de service:`, value: `${formattedTime2}` },
                                         { name: `Temps total en service:`, value: `${totalFormat}` },
                                     )
-                                    .setFooter({ text: `Fin de service - WhiteCustom ` })
+                                    .setFooter({ text: `Fin de service - EMS ` })
 
                                 canal.send({ embeds: [embed] })
 

@@ -1,4 +1,4 @@
-﻿const { ApplicationCommandType, PermissionFlagsBits,ApplicationCommandOptionType, Colors, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ChannelType } = require('discord.js');
+﻿const { ApplicationCommandType, ApplicationCommandOptionType, Colors, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ChannelType } = require('discord.js');
 const ServiceData = require('../../models/service');
 
 module.exports = {

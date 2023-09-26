@@ -39,15 +39,12 @@ module.exports = {
     ],
 execute: async (client, interaction, args) => {
     interaction.setCooldown(1000 * 60 * 60);
-
     const status = interaction.options.getString('status')
     const activity = interaction.options.getString('activity')
     client.user.setPresence({
         status: activity, activities: [{ name: status, type: ActivityType.Playing }],
       });
- 
     interaction.reply({embeds: [new EmbedBuilder().setTitle('Status').setDescription(`Le status du bot modifié avec succès `)]})
-
     }     
 }
  
